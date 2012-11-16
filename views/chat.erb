@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Sinatra realtime chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/">Sinatra realtime chat</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav general_dimensions">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="/logout"><strong>Logout</strong></a></li>
+              <li class="nav-header">Online users</li>
+              <% @users.each do |each| %>
+                <% if each == @user %>
+                  <li class="active"><a href="#"><%= each %></a></li>
+                <% else %>
+                  <li><a href="#"><%= each %></a></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <div class="span9 general_dimensions">
+          <% @messages.each do |message| %>
+            <p><strong><%= message.owner %>:  </strong><%= message.body %><span class="pull-right"><%= message.created_at.strftime("%F %r") %></span></p>
+          <% end %>
+        </div><!--/span-->
+      </div><!--/row-->
+      
+      <div class="row-fluid" id="controls">
+        <form class="form-inline" action="/say" method="post">
+          <input type="submit" class="btn span2" value="Say it!">
+          <input type="text" name="message" placeholder="Say it here." class="span10 pull-right">
+      </div>
+      
+      <hr>
+
+      <footer>
+        <p>&copy; Who's Company 2012</p>
+      </footer>
+
+    </div>
+  </body>
+</html>

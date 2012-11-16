@@ -1,0 +1,11 @@
+.general_dimensions
+{
+  min-height: 10em;
+  max-height: 25em;
+  overflow: auto;
+}
+
+#controls
+{
+  margin-top: 1em;
+}
