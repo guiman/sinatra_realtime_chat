@@ -11,12 +11,14 @@ eventSource.onmessage = function(e) {
     break;
     
     case 2: $("#chat").append("<p><strong>"+ response.owner +":  </strong>"+ response.body +"<span class='pull-right'>"+ response.created_at +"</span></p>");
-    break;
+    $("#chat").animate({ scrollTop: $(document).height() }, "slow");
+		break;
   }
 }
 
 $("form").live("submit", function(e) {
     $.post('/say', {message: $('#message_input').val()});
     $('#message_input').val(''); $('#message_input').focus();
-    e.preventDefault();
+		$("#chat").animate({ scrollTop: $(document).height() }, "slow");    
+		e.preventDefault();
 });
