@@ -59,9 +59,13 @@
             <%= @flash %>
           </div>
         <% end %>
-        <input type="text" class="input-block-level" placeholder="Username" name="username">
+        <input type="text" class="input-block-level" placeholder="Username" name="username" id="username_input">
         <button class="btn btn-large btn-primary" type="submit">Log in</button>
       </form>
     </div> <!-- /container -->
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript">
+    $("#username_input").focus();
+    </script>
   </body>
 </html>

@@ -39,20 +39,20 @@
       <div class="row-fluid">
         <div class="span3">
           <div class="well sidebar-nav general_dimensions">
-            <ul class="nav nav-list">
+            <ul class="nav nav-list" id="user_list">
               <li class="nav-header"><a href="/logout"><strong>Logout</strong></a></li>
               <li class="nav-header">Online users</li>
               <% @users.each do |each| %>
                 <% if each == @user %>
-                  <li class="active"><a href="#"><%= each %></a></li>
+                  <li class="active" id="<%= each %>"><a href="#"><%= each %></a></li>
                 <% else %>
-                  <li><a href="#"><%= each %></a></li>
+                  <li><a href="#" id="<%= each %>"><%= each %></a></li>
                 <% end %>
               <% end %>
             </ul>
           </div>
         </div>
-        <div class="span9 general_dimensions">
+        <div class="span9 general_dimensions" id="chat">
           <% @messages.each do |message| %>
             <p><strong><%= message.owner %>:  </strong><%= message.body %><span class="pull-right"><%= message.created_at.strftime("%F %r") %></span></p>
           <% end %>
@@ -62,7 +62,7 @@
       <div class="row-fluid" id="controls">
         <form class="form-inline" action="/say" method="post">
           <input type="submit" class="btn span2" value="Say it!">
-          <input type="text" name="message" placeholder="Say it here." class="span10 pull-right">
+          <input type="text" id="message_input" name="message" placeholder="Say it here." class="span10 pull-right">
       </div>
       
       <hr>
@@ -72,5 +72,7 @@
       </footer>
 
     </div>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
   </body>
 </html>
