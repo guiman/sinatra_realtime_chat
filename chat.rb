@@ -1,17 +1,37 @@
 require 'rubygems'
 require 'sinatra'
 require 'json'
+require 'redis'
+require 'rack-google-analytics'
 
-set server: 'thin', users: [],  messages: [], connections: []
+use Rack::GoogleAnalytics, :tracker => 'UA-36406911-1'
+set server: 'thin', connections: [], db: Redis.new
 
 class Message
   attr_accessor :body
   attr_reader :owner, :created_at
   
-  def initialize(owner, body = nil)
+  def initialize(owner, body = nil, created_at = nil)
     @owner = owner
     @body = body
-    @created_at = Time.now
+    
+    if created_at
+      @created_at = Time.parse created_at
+    else
+      @created_at = Time.now 
+    end
+  end
+  
+  def self.create(values)
+    self.new(values["owner"], values["body"], values["created_at"])
+  end
+  
+  def to_json(*a)
+    {
+      'owner' => owner,
+      'body'  => body,
+      'created_at' => created_at
+    }.to_json(*a)
   end
 end
 
@@ -20,35 +40,45 @@ configure do
 end
 
 before do
-  # Set flash sessions value
+  # initialize database
+  settings.db.set("users", [].to_json) if settings.db.get("users").nil?
+  settings.db.set("messages", [].to_json) if settings.db.get("messages").nil?
+  
+  # set flash sessions value
   if session[:flash]
     @flash= session[:flash]
     session[:flash] = nil
   else
     @flash = nil
   end
+  
+  # db values population
+  @users = JSON::parse settings.db.get("users")
 end
 
 get '/' do
-  redirect '/chat' if session[:current_username] && settings.users.include?(session[:current_username])
+  redirect '/chat' if session[:current_username] && @users.include?(session[:current_username])
+  
   erb :login
 end
 
 get '/chat' do
-  redirect '/' if !settings.users.include?(session[:current_username]) || session[:current_username].nil?
+  redirect '/' if !@users.include?(session[:current_username]) || session[:current_username].nil?
   
-  @messages = settings.messages
-  @users = settings.users
+  @messages = (JSON::parse settings.db.get("messages")).collect { |message| Message.create message }
+  
   @user = session[:current_username]
   erb :chat
 end
 
 post '/say' do
-  redirect '/' if !settings.users.include?(session[:current_username]) || session[:current_username].nil?
+  redirect '/' if !@users.include?(session[:current_username]) || session[:current_username].nil?
   
   msg = Message.new(session[:current_username], params[:message])
   
-  settings.messages << msg
+  messages = JSON::parse settings.db.get("messages")
+  messages << msg
+  settings.db.set "messages", messages.to_json
   
   settings.connections.each { |out| out << "data: { \"type\": 2, \"owner\": \"#{msg.owner}\", \"body\": \"#{msg.body}\", \"created_at\": \"#{msg.created_at.strftime("%F %r")}\" }\n\n" }
 end
@@ -68,8 +98,9 @@ get '/stream', provides: 'text/event-stream' do
 end
 
 post '/login', provides: 'text/event-stream' do  
-  if params[:username] && params[:username].strip != "" && !settings.users.include?(params[:username])
-    settings.users << params[:username]
+  if params[:username] && params[:username].strip != "" && !@users.include?(params[:username])
+    @users << params[:username]
+    settings.db.set "users", @users.to_json
     session[:current_username] = params[:username]
     settings.connections.each { |out| out << "data: { \"type\": 0, \"user_logged_in\":\"#{params[:username]}\" }\n\n" }
     redirect '/chat'
@@ -81,7 +112,8 @@ end
 
 get '/logout' do
   if session[:current_username]
-    settings.users.delete session[:current_username]
+    @users.delete session[:current_username]
+    settings.db.set "users", @users.to_json
     settings.connections.delete session[:conn]
     settings.connections.each { |out| out << "data: { \"type\": 1, \"user_logged_out\":\"#{session[:current_username]}\" }\n\n" }
     session.clear
