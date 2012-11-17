@@ -44,9 +44,9 @@
               <li class="nav-header">Online users</li>
               <% @users.each do |each| %>
                 <% if each == @user %>
-                  <li class="active" id="<%= each %>"><a href="#"><%= each %></a></li>
+                  <li class="active" id="<%= each %>"><a href="#"><%= each.username %></a></li>
                 <% else %>
-                  <li><a href="#" id="<%= each %>"><%= each %></a></li>
+                  <li><a href="#" id="<%= each %>"><%= each.username %></a></li>
                 <% end %>
               <% end %>
             </ul>
