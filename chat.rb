@@ -6,7 +6,7 @@ require 'rack-google-analytics'
 
 use Rack::GoogleAnalytics, :tracker => 'UA-36406911-1'
 set server: 'thin', connections: []
-DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/chatdb')
+DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_COPPER_URL'] || 'postgres://localhost/chatdb')
 
 class Message
   include DataMapper::Resource
