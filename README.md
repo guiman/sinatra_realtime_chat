@@ -1,7 +1,9 @@
 Sinatra Realtime Chat
 ---------------------
 
-A little chat app using sinatra streaming!
+A little irc app using sinatra streaming!
+
+You can see it online [Sinatra realtime app](http://sinatra-realtime-chat.herokuapp.com)
 
 Objective 
 ---------
