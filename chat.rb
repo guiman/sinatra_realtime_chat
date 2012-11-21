@@ -4,7 +4,7 @@ require 'json'
 require 'data_mapper'
 require 'rack-google-analytics'
 
-use Rack::GoogleAnalytics, :tracker => 'UA-36406911-1'
+use Rack::GoogleAnalytics, :tracker => 'UA-XXXXX-X'
 set server: 'thin', connections: []
 DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_COPPER_URL'] || 'postgres://localhost/chatdb')
 
