@@ -54,13 +54,13 @@
     <div class="container">
       <form class="form-signin" method="post" action="/login">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <% if @flash %>
+        <% if session['flash'] %>
           <div class="alert">
-            <%= @flash %>
+            <%= session['flash'] %>
           </div>
         <% end %>
         <input type="text" class="input-block-level" placeholder="Username" name="username" id="username_input">
-        <button class="btn btn-large btn-primary" type="submit">Log in</button>
+        <button class="btn btn-large btn-primary" type="submit" id="login">Log in</button>
       </form>
     </div> <!-- /container -->
     <script type="text/javascript" src="/js/jquery.js"></script>
