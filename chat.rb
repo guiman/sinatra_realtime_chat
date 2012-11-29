@@ -55,6 +55,7 @@ end
 DataMapper.finalize.auto_migrate!
 
 class ChatApp < Sinatra::Base
+  use Rack::GoogleAnalytics, :tracker => 'UA-36406911-1'
   
   set server: 'thin', connections: []
   set :static_cache_control, [:public, {:max_age => 60 * 60 * 24 * 365}]
