@@ -56,7 +56,7 @@ DataMapper.finalize.auto_migrate!
 
 class ChatApp < Sinatra::Base
   
-  use Rack::GoogleAnalytics, :tracker => 'UA-XXXXX-X'
+  use Rack::GoogleAnalytics, :tracker => 'UA-36406911-1'
   set server: 'thin', connections: []
   
   # Configure Sinatra
