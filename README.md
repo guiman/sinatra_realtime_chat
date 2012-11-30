@@ -5,8 +5,8 @@ A little chat app using sinatra streaming!
 
 You can try it online [Sinatra realtime app](http://sinatra-realtime-chat.herokuapp.com)
 
-What could you spect from this repo
------------------------------------
+What can you expect from this repo
+----------------------------------
 
 So this is just a pet project I started to learn about:
 
