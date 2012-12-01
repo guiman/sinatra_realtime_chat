@@ -3,53 +3,9 @@ require 'sinatra/base'
 require 'json'
 require 'data_mapper'
 require 'rack-google-analytics'
-require 'sinatra/reloader'
+require_relative 'model'
 
 DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_COPPER_URL'] || 'postgres://localhost/chatdb')
-
-class Message
-  include DataMapper::Resource
-  
-  property :id, Serial
-  property :owner, String
-  property :body, Text
-  property :created_at, Time
-    
-  def to_json(*a)
-    {
-      'owner' => owner,
-      'body'  => body,
-      'created_at' => created_at
-    }.to_json(*a)
-  end
-end
-
-class User
-  include DataMapper::Resource
-  
-  property :id, Serial
-  property :username, String
-  
-  def to_json(*a)
-    { 'username' => username }.to_json(*a)
-  end
-end
-
-class StreamResponse
-  attr_accessor :type, :data
-  
-  def initialize(type, data)
-    @type = type
-    @data = data
-  end
-  
-  def build
-    ret = { type: @type, message: @data }
-    
-    "data: #{ret.to_json}\n\n"
-  end
-  
-end
 
 # Initialize DataMapper
 DataMapper.finalize.auto_migrate!
@@ -63,7 +19,6 @@ class ChatApp < Sinatra::Base
   # Configure Sinatra
   configure do
     enable :sessions
-    register Sinatra::Reloader
   end
   
   # before statements 
@@ -86,6 +41,7 @@ class ChatApp < Sinatra::Base
   
   # route definitions
   get '/' do
+    expires(60 * 60 * 24 * 365, :public)
     erb :login
   end
 
@@ -98,7 +54,8 @@ class ChatApp < Sinatra::Base
   end
 
   post '/say' do
-    settings.connections.each { |out| out << StreamResponse.new(2, Message.create(owner: session[:current_username], body: params[:message])).build }
+    message = Message.create(owner: session[:current_username], body: params[:message])
+    settings.connections.each { |out| out << StreamResponse.new(2, message).build }
   end
 
   get '/stream', provides: 'text/event-stream' do
