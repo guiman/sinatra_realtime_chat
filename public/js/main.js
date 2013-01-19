@@ -1,33 +1,23 @@
 var eventSource = new EventSource("/stream");
 
-$(document).ready(function(){
-  
-  $(document).bind("logout", function(event, response) { $("#"+response.message.user_logged_out.username).remove(); });
-  $(document).bind("login",  function(event, response) { $("#user_list").append("<li id='"+response.message.user_logged_in.username+"'><a href='#'>" +response.message.user_logged_in.username+ "</a></li>"); });
-  $(document).bind("update", function(event, response) {
-    $("#chat").append("<p><strong>"+ response.message.owner +":  </strong>"+ response.message.body +"<span class='pull-right'>"+ response.message.created_at +"</span></p>");
-    $("#chat").animate({ scrollTop: $(document).height() }, "slow");
-  });
-  
-  eventSource.addEventListener("message", function(e) {
-    $(document).trigger("")
-    
-    response = jQuery.parseJSON(e.data);
-    
-    switch(response.type)
-    {
-      case 0: $(document).trigger("login", response);
-      break;
-    
-      case 1: $(document).trigger("logout", response);
-      break;
-    
-      case 2: $(document).trigger("update", response);
-  		break;
-    }
-  });
+eventSource.addEventListener("login", function(e) {
+  response = jQuery.parseJSON(e.data);
+  $("#user_list").append("<li id='"+response.user_logged_in.username+"'><a href='#'>" +response.user_logged_in.username+ "</a></li>"); 
+});
 
-  $("form").live("submit", function(e) {
+eventSource.addEventListener("logout", function(e) {
+  response = jQuery.parseJSON(e.data);
+  $("#"+response.user_logged_out.username).remove();
+});
+
+eventSource.addEventListener("say", function(e) {
+  response = jQuery.parseJSON(e.data);
+  $("#chat").append("<p><strong>"+ response.owner +":  </strong>"+ response.body +"<span class='pull-right'>"+ response.created_at +"</span></p>");
+  $("#chat").animate({ scrollTop: $(document).height() }, "slow");
+});
+
+$(document).ready(function(){  
+  $("form").on("submit", function(e) {
       $.post('/say', {message: $('#message_input').val()});
       $('#message_input').val(''); $('#message_input').focus();
   		$("#chat").animate({ scrollTop: $(document).height() }, "slow");    

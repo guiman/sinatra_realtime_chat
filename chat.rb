@@ -55,7 +55,8 @@ class ChatApp < Sinatra::Base
 
   post '/say' do
     message = Message.create(owner: session[:current_username], body: params[:message])
-    settings.connections.each { |out| out << StreamResponse.new(2, message).build }
+    settings.connections.each { |out| StreamResponse.new(:say, message).send(out) }
+    halt(201, { message: "created correctly"}.to_json)
   end
 
   get '/stream', provides: 'text/event-stream' do
@@ -79,7 +80,7 @@ class ChatApp < Sinatra::Base
       # set username for his/her session
       session[:current_username] = params[:username]
       # sending all connected users a notice that a new member arrived
-      settings.connections.each { |out| out << StreamResponse.new(0, { user_logged_in:  user }).build }
+      settings.connections.each { |out| StreamResponse.new(:login, { user_logged_in:  user }).send(out) }
       redirect '/chat'
     end
   
@@ -92,7 +93,7 @@ class ChatApp < Sinatra::Base
     user = User.first(username: session[:current_username])
     user.destroy
     # notify open connections that a user left
-    settings.connections.each { |out| out << StreamResponse.new(1, { user_logged_out: user }).build }
+    settings.connections.each { |out| StreamResponse.new(:logout, { user_logged_out: user }).send(out) }
     session.clear
   
     session[:flash]= "Hope to see ya soon!"
