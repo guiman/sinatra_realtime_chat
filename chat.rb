@@ -46,11 +46,22 @@ class ChatApp < Sinatra::Base
   end
 
   get '/chat' do
-    @messages = Message.all
-    @users = User.all
     @user = User.first(username: session[:current_username])
-  
     erb :chat
+  end
+
+  get '/messages' do
+    @messages = Message.all
+
+    content_type :json
+    @messages.to_json
+  end
+
+  get '/users' do
+    @users = User.all
+
+    content_type :json
+    @users.to_json
   end
 
   post '/say' do
