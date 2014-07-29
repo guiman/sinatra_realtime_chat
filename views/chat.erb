@@ -26,7 +26,7 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body ng-app="ChatApp">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -37,34 +37,30 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
+        <div class="span3" ng-controller="UserController">
           <div class="well sidebar-nav general_dimensions">
             <ul class="nav nav-list" id="user_list">
               <li class="nav-header"><a href="/logout"><strong>Logout</strong></a></li>
               <li class="nav-header">Online users</li>
-              <% @users.each do |each| %>
-                <% if each == @user %>
-                  <li class="active" id="<%= each.username %>"><a href="#"><%= each.username %></a></li>
-                <% else %>
-                  <li><a href="#" id="<%= each.username %>"><%= each.username %></a></li>
-                <% end %>
-              <% end %>
+              <li ng-repeat="user in users">
+                <a href="#" id="{{user.username}}">{{user.username}}</a>
+              </li>
             </ul>
           </div>
         </div>
-        <div class="span9 general_dimensions" id="chat">
-          <% @messages.each do |message| %>
-            <p><strong><%= message.owner %>:  </strong><%= message.body %><span class="pull-right"><%= message.created_at.strftime("%F %r") %></span></p>
-          <% end %>
+        <div class="span9 general_dimensions" id="chat" ng-controller="ChatController">
+          <div class="row-fluid">
+            <p ng-repeat="msg in messages track by $index">
+            <strong>{{msg.owner}}</strong>:{{msg.body}}<span class="pull-right">{{msg.created_at}}</span>
+            </p>
+          </div>
+
+          <div class="row-fluid" id="controls">
+            <input type="button" class="btn span2" value="Say it!" ng-click="sendMessage()">
+            <input type="text" id="message_input" name="message" placeholder="Say it here." class="span10 pull-right" ng-model="message">
+          </div>
         </div><!--/span-->
       </div><!--/row-->
-      
-      <div class="row-fluid" id="controls">
-        <form class="form-inline" action="/say" method="post">
-          <input type="submit" class="btn span2" value="Say it!">
-          <input type="text" id="message_input" name="message" placeholder="Say it here." class="span10 pull-right">
-      </div>
-      
       <hr>
 
       <footer>
@@ -73,6 +69,7 @@
 
     </div>
     <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/angular.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
   </body>
 </html>

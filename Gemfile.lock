@@ -123,7 +123,7 @@ DEPENDENCIES
   erubis
   json
   launchy
-  pg (= 0.13.2)
+  pg
   poltergeist (= 0.7)
   rack-google-analytics
   rake
