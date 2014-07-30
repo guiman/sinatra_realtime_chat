@@ -1,10 +1,42 @@
-var app = angular.module('ChatApp', []);
+angular.module('Utils', [])
+  .factory('Dispatcher', function($rootScope) {
+    var $scope = $rootScope.$new(true);
+    this.$scope = $scope;
+    this.services = [];
 
-app.service('messagesService', function($http) {
+    this.generateId = function() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+      }
+
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
+
+    $scope.register = function(service) {
+      if (this.services.indexOf(service) > -1) return;
+      service.__serviceId__ = this.generateId();
+
+      service.$on = function(name, listener) {
+        return $scope.$on(service.__serviceId__ + ':' + name, listener);
+      };
+
+      service.$broadcast = function(name, args) {
+        return $scope.$broadcast(service.__serviceId__ + ':' + name, args);
+      };
+
+      this.services.push(service);
+    }.bind(this);
+
+    return $scope;
+  });
+
+var app = angular.module('ChatApp', ['Utils']);
+
+app.service('messagesService', function($http, Dispatcher) {
   var self = this;
   this.messages = [];
-  this.listeners = [];
   this.source = new EventSource("/stream");
+  Dispatcher.register(this);
 
   this.fetchMessages = function() {
     return $http.get('/messages').then(function(response) {
@@ -14,10 +46,6 @@ app.service('messagesService', function($http) {
         self.messages.push(JSON.parse(entry));
       });
     });
-  };
-
-  this.registerListener = function(listener_callback) {
-    this.listeners.push(listener_callback);
   };
 
   this.sendMessage = function(message) {
@@ -34,9 +62,7 @@ app.service('messagesService', function($http) {
   this.source.addEventListener("say", function(e) {
     response = JSON.parse(e.data);
     self.messages.push({ owner: response.owner, body: response.body, created_at: response.created_at });
-    self.listeners.forEach(function(update_messages_callback) {
-      update_messages_callback.call();
-    });
+    self.$broadcast('messages:updated');
   });
 });
 
@@ -54,14 +80,14 @@ app.controller('ChatController', function($scope, messagesService) {
     });
   };
 
-  messagesService.registerListener(this.updateMessages);
+  messagesService.$on('messages:updated', this.updateMessages);
 });
 
-app.service('userService', function($http) {
+app.service('userService', function($http, Dispatcher) {
   var self = this;
   this.users = [];
-  this.listeners = [];
   this.source = new EventSource("/stream");
+  Dispatcher.register(this);
 
   this.fetchUsers = function() {
     return $http.get('/users').then(function(response) {
@@ -73,16 +99,10 @@ app.service('userService', function($http) {
     });
   };
 
-  this.registerListener = function(listener_callback) {
-    this.listeners.push(listener_callback);
-  };
-
   this.source.addEventListener("login", function(e) {
     response = JSON.parse(e.data);
     self.users.push({ username: response.user_logged_in.username });
-    self.listeners.forEach(function(update_messages_callback) {
-      update_messages_callback.call();
-    });
+    self.$broadcast('users:updated');
   });
 
   this.source.addEventListener("logout", function(e) {
@@ -95,9 +115,7 @@ app.service('userService', function($http) {
       }
       i++;
     }
-    self.listeners.forEach(function(update_messages_callback) {
-      update_messages_callback.call();
-    });
+    self.$broadcast('users:updated');
   });
 
   this.fetchUsers();
@@ -112,5 +130,5 @@ app.controller('UserController', function($scope, userService) {
     });
   };
 
-  userService.registerListener(this.updateUsers);
+  userService.$on('users:updated', this.updateUsers);
 });
