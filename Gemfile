@@ -8,7 +8,8 @@ group :test do
   gem 'launchy'
 end
 
-gem 'sinatra'
+gem 'sinatra', require: 'sinatra/base'
+gem 'sinatra-websocket'
 gem 'json'
 gem 'thin'
 gem 'data_mapper', '1.2.0'

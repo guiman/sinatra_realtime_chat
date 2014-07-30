@@ -25,17 +25,3 @@ class User
     { 'username' => username }.to_json(*a)
   end
 end
-
-class StreamResponse
-  attr_accessor :type, :data, :body
-  
-  def initialize(type, data)
-    @type = type
-    @data = data
-  end
-  
-  def send(output)
-    output << "event: #{type.to_s}\n"
-    output << "data: #{data.to_json}\n\n"
-  end
-end
