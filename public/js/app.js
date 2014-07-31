@@ -1,4 +1,9 @@
 angular.module('Utils', [])
+  .filter('dateify', function() {
+    return function(timeString) {
+      return Date.parse(timeString);
+    }
+  })
   .factory('Dispatcher', function($rootScope) {
     var $scope = $rootScope.$new(true);
     this.$scope = $scope;
@@ -30,7 +35,7 @@ angular.module('Utils', [])
     return $scope;
   });
 
-var app = angular.module('ChatApp', ['Utils']);
+var app = angular.module('ChatApp', ['Utils', 'luegg.directives']);
 
 app.service('messagesService', function($http, Dispatcher) {
   var self = this;
