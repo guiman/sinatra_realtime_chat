@@ -1,0 +1,22 @@
+{
+  "name":"sinatra-realtime-chat",
+  "version":"0.0.0",
+  "main":"gulpfile.js",
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.5",
+    "gulp-angular-filesort": "^0.1.1",
+    "gulp-angular-htmlify": "^0.2.1",
+    "gulp-angular-templatecache": "^1.2.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-jshint": "^1.6.3",
+    "gulp-ng-annotate": "^0.2.0",
+    "gulp-notify": "^1.4.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.2",
+    "gulp-uglify": "^0.3.1",
+    "gulp-wrapper": "^0.1.42",
+    "jshint-stylish": "^0.2.0"
+  }
+}

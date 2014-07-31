@@ -1,0 +1,22 @@
+.general_dimensions {
+  min-height: 10em;
+  max-height: 25em;
+  overflow: hidden;
+}
+
+#controls {
+  margin-top: 1em;
+}
+
+.chat-window {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 20em;
+}
+
+.brand {
+  font-size: 1.3em;
+  color: white !important;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}

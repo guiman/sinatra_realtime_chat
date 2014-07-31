@@ -1,0 +1,9 @@
+{
+  "name": "sinatra-realtime-chat",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular" : "~1.2.19",
+    "foundation" : "5.3.2",
+    "jquery" : "2.1.2"
+  }
+}
