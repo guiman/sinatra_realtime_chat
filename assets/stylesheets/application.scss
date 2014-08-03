@@ -1,0 +1,110 @@
+.general_dimensions {
+  min-height: 10em;
+  max-height: 25em;
+  overflow: hidden;
+}
+
+#controls {
+  margin-top: 1em;
+}
+
+.chat-window {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 20em;
+}
+
+.brand {
+  font-size: 1.3em;
+  color: white !important;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.top-bar {
+  height: 5%;
+  min-height: 45px;
+}
+
+.full-width {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  height: 95%;
+
+}
+
+.users {
+}
+
+.chat {
+  position: relative;
+  height: 100%;
+  max-height: 100%;
+  padding: 0;
+
+  .messages {
+    position: relative;
+    height: 85%;
+    overflow: scroll;
+
+    .msg {
+      border-top: 1px solid #E0E0E0;
+      border-rigth: 1px solid #E0E0E0;
+      font-size: 0.9em;
+      height: 45px;
+
+      .owner {
+        display: inline;
+        float: left;
+        width: 10%;
+        font-weight: bold;
+        text-align: right;
+        background-color: #f7f7f7;
+        height: 100%;
+        padding-right: 0.5em;
+      }
+
+      .content {
+        display: inline;
+        width: 90%;
+
+        .body {
+          display: inline;
+          padding-left: 0.5em;
+        }
+
+        .timestamp {
+          display: inline;
+          float: right;
+          padding-right: 1.0em;
+        }
+      }
+    }
+  }
+
+  .message-input {
+    border: 1px solid #A0A0A0;
+    padding: 3px;
+    width: 100%;
+    float: left;
+    height: 10%;
+    min-height: 60px;
+
+    textarea {
+      height: 100%;
+      resize: none;
+      width: 90%;
+      display: inline;
+      margin: 0;
+      float: left;
+    }
+
+    button {
+      background-color: #008CBA;
+      width: 9%;
+      margin-left: 0.5em;
+      height: 100%;
+    }
+  }
+}
