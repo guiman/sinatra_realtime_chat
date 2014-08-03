@@ -35,29 +35,30 @@
       </div>
 
       <div class="large-9 medium-9 columns chat" ng-controller="ChatController">
-        <div class="messages">
-          <div class="msg" ng-repeat="msg in messages">
-            <div class="owner">{{msg.owner}}</div>
-            <div class="content">
-              <div class="body">
-                {{msg.body}}
-              </div>
-              <div class="timestamp">
-                {{msg.created_at}}
+        <div class="messages" scroll-glue>
+          <div class="msg row" ng-repeat="msg in messages">
+            <div class="owner small-2 columns">{{msg.owner}}</div>
+            <div class="content small-10 columns">
+              <div class="row">
+                <div class="body small-10 columns" ng-bind-html="msg.body | giffy:'_blank'"></div>
+                <div class="timestamp small-2 columns">
+                  {{msg.created_at}}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="message-input">
-          <textarea ng-model="message"></textarea>
+          <textarea ng-model="message" ng-enter="sendMessage()"></textarea>
           <button ng-click="sendMessage()">Send</button>
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="/bower/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="/bower/angular/angular.js"></script>
-    <script type="text/javascript" src="/js/angular-scroll-glue.js"></script>
-    <script type="text/javascript" src="/javascripts/application.js"></script>
+    <script src="/bower/jquery/dist/jquery.js"></script>
+    <script src="/bower/angular/angular.js"></script>
+    <script src="/bower/angularjs-scroll-glue-Luegg/src/scrollglue.js"></script>
+    <script src="/bower/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/javascripts/application.js"></script>
   </body>
 </html>

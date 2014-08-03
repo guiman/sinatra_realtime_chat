@@ -46,38 +46,32 @@
   .messages {
     position: relative;
     height: 85%;
-    overflow: scroll;
+    overflow: auto;
 
     .msg {
       border-top: 1px solid #E0E0E0;
       border-rigth: 1px solid #E0E0E0;
+      background-color: #f7f7f7;
       font-size: 0.9em;
-      height: 45px;
+
+      .msg-image {
+        display: block;
+      }
 
       .owner {
-        display: inline;
-        float: left;
-        width: 10%;
         font-weight: bold;
         text-align: right;
-        background-color: #f7f7f7;
         height: 100%;
-        padding-right: 0.5em;
+        min-height: 100%;
       }
 
       .content {
-        display: inline;
-        width: 90%;
+        background-color: #fff;
 
         .body {
-          display: inline;
-          padding-left: 0.5em;
         }
 
         .timestamp {
-          display: inline;
-          float: right;
-          padding-right: 1.0em;
         }
       }
     }
