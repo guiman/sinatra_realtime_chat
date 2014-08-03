@@ -7,12 +7,17 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass'),
-    notify = require('gulp-notify');
+    notify = require('gulp-notify'),
+    ngAnnotate = require('gulp-ng-annotate');
 
 gulp.task('compile-js', function () {
   return gulp.src('assets/javascripts/**/*.js')
     .pipe(angularFileSort())
     .pipe(concat('application.js'))
+    .pipe(ngAnnotate({
+      add: true,
+      single_quotes: true
+    }))
     .pipe(wrapper({
       header: '(function(window, document) {\n',
       footer: '\n})(window, document);'

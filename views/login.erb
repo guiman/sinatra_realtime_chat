@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bower/foundation/css/foundation.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 40px;
@@ -19,7 +19,7 @@
       .form-signin {
         max-width: 300px;
         padding: 19px 29px 29px;
-        margin: 0 auto 20px;
+        margin: auto;
         background-color: #fff;
         border: 1px solid #e5e5e5;
         -webkit-border-radius: 5px;
@@ -42,7 +42,6 @@
       }
 
     </style>
-    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -51,19 +50,21 @@
   </head>
 
   <body>
-    <div class="container">
-      <form class="form-signin" method="post" action="/login">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <% if session['flash'] %>
-          <div class="alert">
-            <%= session['flash'] %>
-          </div>
-        <% end %>
-        <input type="text" class="input-block-level" placeholder="Username" name="username" id="username_input">
-        <button class="btn btn-large btn-primary" type="submit" id="login">Log in</button>
-      </form>
+    <div class="row">
+      <div class="small-6 large-centered columns">
+        <form class="form-signin" method="post" action="/login">
+          <h2 class="form-signin-heading">Please sign in</h2>
+          <% if session['flash'] %>
+            <div class="alert">
+              <%= session['flash'] %>
+            </div>
+          <% end %>
+          <input type="text" class="input-block-level" placeholder="Username" name="username" id="username_input">
+          <button class="btn btn-large btn-primary" type="submit" id="login">Log in</button>
+        </form>
+      </div>
     </div> <!-- /container -->
-    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/bower/jquery/dist/jquery.js"></script>
     <script type="text/javascript">
     $("#username_input").focus();
     </script>
