@@ -50,7 +50,14 @@ class ChatApp < Sinatra::Base
       end
 
       ws.onmessage do |msg|
-        ParseRequest.new(msg).response.send(ws)
+        request_parser = ParseRequest.new(msg)
+        response = request_parser.response
+
+        if request_parser.propagate
+          settings.connections.each { |conn| response.send(conn) }
+        else
+          response.send(ws)
+        end
       end
 
       ws.onclose do

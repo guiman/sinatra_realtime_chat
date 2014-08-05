@@ -1,5 +1,5 @@
 class UsersStrategy
-  def self.execute
+  def self.execute(parser, data)
     User.all
   end
 end

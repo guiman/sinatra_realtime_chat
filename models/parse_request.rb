@@ -1,4 +1,6 @@
 class ParseRequest
+  attr_accessor :propagate
+
   def initialize(data)
     parsed_data = JSON.parse(data)
     parsed_method = parsed_data.fetch("method", :missing).to_sym
@@ -7,11 +9,11 @@ class ParseRequest
   end
 
   def available_methods
-    [:unknown, :missing, :messages, :users]
+    [:unknown, :missing, :messages, :message, :users]
   end
 
   def response
-    StreamResponse.new(@method, find_handler_by_method.execute)
+    StreamResponse.new(@method, find_handler_by_method.execute(self, @body))
   end
 
   def find_handler_by_method
