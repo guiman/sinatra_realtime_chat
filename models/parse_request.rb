@@ -1,8 +1,13 @@
 class ParseRequest
   def initialize(data)
     parsed_data = JSON.parse(data)
-    @method = parsed_data["method"] || :unknown
+    parsed_method = parsed_data.fetch("method", :missing).to_sym
+    @method = available_methods.include?(parsed_method) ? parsed_method : :unknown
     @body = parsed_data["body"]
+  end
+
+  def available_methods
+    [:unknown, :missing, :messages, :users]
   end
 
   def response

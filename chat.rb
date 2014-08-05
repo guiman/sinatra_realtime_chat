@@ -42,22 +42,7 @@ class ChatApp < Sinatra::Base
     erb :chat
   end
 
-  get '/messages' do
-    @messages = Message.all
-
-    content_type :json
-    @messages.to_json
-  end
-
-  get '/users' do
-    @users = User.all
-
-    content_type :json
-    @users.to_json
-  end
-
-  post '/socket' do
-    halt(400, { message: "not a websocket request" }.to_json ) unless request.websocket?
+  get '/socket' do
     request.websocket do |ws|
       ws.onopen do
         settings.connections << ws
@@ -74,7 +59,6 @@ class ChatApp < Sinatra::Base
         settings.connections.each { |conn| StreamResponse.new(:logout, {}).send(conn) }
       end
     end
-    Message.create(owner: session[:current_username], body: params[:message])
   end
 
   post '/login' do
