@@ -1,6 +1,5 @@
 Bundler.require
-require_relative 'model'
-
+Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
 DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_COPPER_URL'] || 'postgres://localhost/chatdb')
 
 # Initialize DataMapper
@@ -62,17 +61,17 @@ class ChatApp < Sinatra::Base
     request.websocket do |ws|
       ws.onopen do
         settings.connections << ws
+        settings.connections.each { |conn| StreamResponse.new(:login, {}).send(conn) }
       end
 
       ws.onmessage do |msg|
-        EM.next_tick do
-          settings.sockets.each { |s| s.send(msg) }
-        end
+        ParseRequest.new(msg).response.send(ws)
       end
 
       ws.onclose do
         warn("websocket closed")
         settings.connections.delete(ws)
+        settings.connections.each { |conn| StreamResponse.new(:logout, {}).send(conn) }
       end
     end
     Message.create(owner: session[:current_username], body: params[:message])
