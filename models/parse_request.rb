@@ -1,5 +1,5 @@
 class ParseRequest
-  attr_accessor :propagate
+  attr_accessor :propagate_response
 
   def initialize(data)
     parsed_data = JSON.parse(data)

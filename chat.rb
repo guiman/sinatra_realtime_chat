@@ -53,7 +53,7 @@ class ChatApp < Sinatra::Base
         request_parser = ParseRequest.new(msg)
         response = request_parser.response
 
-        if request_parser.propagate
+        if request_parser.propagate_response
           settings.connections.each { |conn| response.send(conn) }
         else
           response.send(ws)
