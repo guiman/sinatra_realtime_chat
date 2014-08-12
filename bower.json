@@ -5,7 +5,7 @@
     "angular": "~1.2.19",
     "angularjs-scroll-glue-Luegg": "1.0.1",
     "foundation": "5.3.2",
-    "jquery": "2.1.2",
-    "angular-sanitize": "~1.2.21"
+    "angular-sanitize": "~1.2.21",
+    "jquery": "~2.1.1"
   }
 }

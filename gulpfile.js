@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass'),
     notify = require('gulp-notify'),
-    ngAnnotate = require('gulp-ng-annotate');
+    ngAnnotate = require('gulp-ng-annotate'),
+    jshint = require('gulp-jshint');
 
 gulp.task('compile-js', function () {
   return gulp.src('assets/javascripts/**/*.js')
@@ -22,7 +23,6 @@ gulp.task('compile-js', function () {
       header: '(function(window, document) {\n',
       footer: '\n})(window, document);'
     }))
-    .pipe(gulp.dest('dist'))
     .pipe(rename('application.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('public/javascripts'))
@@ -37,9 +37,14 @@ gulp.task('compile-js-dev', function () {
       header: '(function(window, document) {\n',
       footer: '\n})(window, document);'
     }))
-    .pipe(gulp.dest('dist'))
     .pipe(gulp.dest('public/javascripts'))
     .pipe(notify('Javascript compilation completed successfully'));
+});
+
+gulp.task('check-js-syntax', function() {
+  return gulp.src('assets/javascripts/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('sass', function() {

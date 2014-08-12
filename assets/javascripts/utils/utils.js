@@ -33,4 +33,25 @@ angular.module('Utils', [])
     }.bind(this);
 
     return $scope;
+  })
+  .factory('GlobalDispatcher', function($rootScope) {
+    var $scope = $rootScope.$new(true);
+    this.$scope = $scope;
+    this.services = [];
+
+    $scope.register = function(service) {
+      if (this.services.indexOf(service) > -1) return;
+
+      service.$on = function(name, listener) {
+        return $scope.$on(name, listener);
+      };
+
+      service.$broadcast = function(name, args) {
+        return $scope.$broadcast(name, args);
+      };
+
+      this.services.push(service);
+    }.bind(this);
+
+    return $scope;
   });
