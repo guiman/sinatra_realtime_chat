@@ -1,0 +1,15 @@
+{
+  "predef": [
+    "angular",
+    "debugger",
+    "console",
+    "alert",
+    "document",
+    "d3",
+    "setTimeout",
+    "google",
+    "clearTimeout"
+  ],
+
+  "globalstrict": true
+}

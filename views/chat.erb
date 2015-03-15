@@ -7,7 +7,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -17,8 +16,8 @@
         padding: 9px 0;
       }
     </style>
-    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="/bower/foundation/css/foundation.css" rel="stylesheet">
+    <link href="/stylesheets/application.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -26,53 +25,40 @@
     <![endif]-->
   </head>
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="brand" href="/">Sinatra realtime chat</a>
-        </div>
+  <body ng-app="ChatApp">
+    <nav class="top-bar"></nav>
+    <div class="row full-width">
+      <div class="large-3 medium-3 columns users" ng-controller="UserController">
+        <ul class="side-nav">
+          <li ng-repeat="user in users"><a href="#">{{user.username}}</a></li>
+        </ul>
       </div>
-    </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav general_dimensions">
-            <ul class="nav nav-list" id="user_list">
-              <li class="nav-header"><a href="/logout"><strong>Logout</strong></a></li>
-              <li class="nav-header">Online users</li>
-              <% @users.each do |each| %>
-                <% if each == @user %>
-                  <li class="active" id="<%= each.username %>"><a href="#"><%= each.username %></a></li>
-                <% else %>
-                  <li><a href="#" id="<%= each.username %>"><%= each.username %></a></li>
-                <% end %>
-              <% end %>
-            </ul>
+      <div class="large-9 medium-9 columns chat" ng-controller="ChatController">
+        <div class="messages" scroll-glue>
+          <div class="msg row" ng-repeat="msg in messages">
+            <div class="owner small-2 columns">{{msg.owner}}</div>
+            <div class="content small-10 columns">
+              <div class="row">
+                <div class="body small-10 columns" ng-bind-html="msg.body | giffy:'_blank'"></div>
+                <div class="timestamp small-2 columns">
+                  {{msg.created_at}}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="span9 general_dimensions" id="chat">
-          <% @messages.each do |message| %>
-            <p><strong><%= message.owner %>:  </strong><%= message.body %><span class="pull-right"><%= message.created_at.strftime("%F %r") %></span></p>
-          <% end %>
-        </div><!--/span-->
-      </div><!--/row-->
-      
-      <div class="row-fluid" id="controls">
-        <form class="form-inline" action="/say" method="post">
-          <input type="submit" class="btn span2" value="Say it!">
-          <input type="text" id="message_input" name="message" placeholder="Say it here." class="span10 pull-right">
+
+        <div class="message-input">
+          <textarea ng-model="message" ng-enter="sendMessage()"></textarea>
+          <button ng-click="sendMessage()">Send</button>
+        </div>
       </div>
-      
-      <hr>
-
-      <footer>
-        <p>&copy; Who's Company 2012</p>
-      </footer>
-
     </div>
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script src="/bower/jquery/dist/jquery.js"></script>
+    <script src="/bower/angular/angular.js"></script>
+    <script src="/bower/angularjs-scroll-glue-Luegg/src/scrollglue.js"></script>
+    <script src="/bower/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/javascripts/application.js"></script>
   </body>
 </html>

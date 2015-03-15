@@ -8,11 +8,12 @@ group :test do
   gem 'launchy'
 end
 
-gem 'sinatra'
+gem 'sinatra', require: 'sinatra/base'
+gem 'sinatra-websocket'
 gem 'json'
 gem 'thin'
 gem 'data_mapper', '1.2.0'
 gem 'dm-postgres-adapter', '1.2.0'
-gem 'pg', '0.13.2'
+gem 'pg'
 gem 'rack-google-analytics'
 gem 'erubis'
